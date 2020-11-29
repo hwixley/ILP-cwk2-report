@@ -1,0 +1,33 @@
+ILP cwk 2
+
+1) Find optimal route between sensors
+	-This should naturally produce a circular route
+	-We must add the return path to this route too
+	
+	Options: 2-Opt , or Greedy with 2-Opt
+
+2) Route find with appropriate angles (divisible by 10):
+     #Calculate the range of possible angles for a straight line to a w3w tile.
+	-We can do this by calculating the difference between the angles adjacent to the closest one
+	 (from the origin point).
+	-Let the initial pathAngle be defined by one of the adjacent points
+	-We can then see if this difference in angle is larger than the remainder produced by pathAngle % 10
+	 (in the correct direction of course [we will do it all anticlockwise])
+	 If so then it is possible to calculate a destinaton point with a valid angle.
+
+     #Do a supplementary path by rounding angle (ceiling or floor) from the closest tile point:
+	-Distance can be taken as a percentage of the original length, this percentage can be calculated by
+	 the percentage offset/remainder of the original angle.
+
+     #This process is repeated
+
+3) Route find that avoids buildings
+     #Create a function that checks if a path (line between 2 points) cuts across a building
+	-Mathematically you can check if 2 lines meet by trying to equate them
+	-Create a Line object; gradient, y-intercept
+	-Initialize all the points in the building as Line objects
+	-Loop through all the building Line objects and equate these to our input Line:
+
+	 val = (building_Line.yint - input_Line.yint) + (building_Line.grad - input.Line.grad)x
+	 **this will produce an error if (val_grad=0 and val_yint!=0), if error then we know these lines
+	   do not meet and this is a valid path

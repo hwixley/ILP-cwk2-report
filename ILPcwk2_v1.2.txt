@@ -1,0 +1,34 @@
+1) Fix sensor object and it's initialization (when parsing w3w file)
+	-We must retrieve the "coordinates" field as the point for the sensor
+	**NOT the vertices of the W3W tile
+
+2) Check for distance:
+	The length of a move must be exactly 0.0003 degrees
+
+	1) Check if an edge is possible in one move (distance +- 0.0002 = 0.0003)
+		1.1) If so then we must check if the range of possible angles at this length are valid
+		1.2) If not then we must do a fragmented edge (check paint diagram)
+
+2) Calculate angle:
+	Use the tangent of the path line (line from previous sensor to next sensor) as a way to calculate the
+	range of angles.
+
+	-Once the appropriate angle is found we can try vary the lat/lng (within the error radius) s.t. the 
+	 distance between points is 0.0003.
+	-If the distance between the 2 points is greater than 0.0003 we can conjoin 2 paths
+
+CHECKS:
+1) If path goes through building
+2) If path goes through confinement area
+
+EDGE CASES:
+1) drone has to move before taking a reading (if there is a sensor in range from start point).
+
+USEFUL TACTIC FOR GETTING TO NEXT SENSOR:
+if distance between the 2 sensors is not sufficient:
+	Then take the angle between the 2 sensors and make a move that equates their lat/lng.
+	We know the angle between this new point and the destination point is valid.
+
+IMPORTANT:
+-drone can finishing close to the start point (within 0.0003 degrees)
+-can add sensor markers to Geo-JSON text variable before route finding
